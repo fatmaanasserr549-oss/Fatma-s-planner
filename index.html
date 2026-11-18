@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7eee9">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="جهاز فاطمة"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Fatma's Wedding Planner</title>
+<style>
+:root{--bg:#fbf7f4;--card:#fff;--ink:#463a37;--muted:#8e7d77;--rose:#b87980;--rose2:#f3e2e1;--line:#eee3de;--green:#5d927a;--shadow:0 8px 24px #65443b0c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}
+header{padding:28px 18px 22px;background:linear-gradient(135deg,#f2e2df,#faf3ed);text-align:center;border-bottom:1px solid var(--line)}
+header .crown{font-size:27px}h1{font-family:Georgia,serif;font-size:27px;margin:7px 0 4px;color:#79575a;direction:ltr}header p{margin:0;color:var(--muted);font-size:13px}
+.wrap{max-width:850px;margin:auto;padding:16px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:8px 0 14px}
+.stat,.panel,.category{background:var(--card);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
+.stat{padding:13px 10px;text-align:center}.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;font-size:19px;margin-top:5px;color:#79575a}
+.panel{padding:15px;margin-bottom:13px}.panel h2{font-size:15px;margin:0 0 12px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}
+input,select{width:100%;border:1px solid var(--line);background:#fffdfa;border-radius:10px;padding:11px;color:var(--ink);font:inherit;outline:none}
+input:focus,select:focus{border-color:var(--rose)}
+.progress{height:9px;background:#f1e8e4;border-radius:20px;overflow:hidden;margin-top:10px}.bar{height:100%;width:0;background:var(--green);transition:width .2s}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+button{border:0;border-radius:10px;padding:10px 13px;font:inherit;cursor:pointer;background:var(--rose2);color:#79575a}
+button.primary{background:var(--rose);color:white}button.ghost{background:#fff;border:1px solid var(--line)}
+.search{flex:1;min-width:150px}
+.category{margin:10px 0;overflow:hidden}
+.cathead{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;cursor:pointer;background:#fff}
+.cathead b{font-size:14px}.count{font-size:11px;color:var(--muted);background:#f8efec;padding:5px 8px;border-radius:20px}
+.items{padding:0 13px 10px}.item{display:grid;grid-template-columns:22px minmax(0,1fr) 58px 86px 28px;gap:6px;align-items:center;padding:9px 0;border-top:1px solid #f4eeeb}
+.item input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
+.item .name{font-size:13px}.item.done .name{text-decoration:line-through;color:#a99b95}
+.item input.price,.item input.qty{padding:7px 5px;font-size:12px;text-align:center}.item input.qty{min-width:0}
+.item .del{padding:6px;background:transparent;color:#b49b95}
+.item .extra{grid-column:2/6;display:none}.item:focus-within .extra{display:block}
+.empty{text-align:center;color:var(--muted);padding:20px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+@media(max-width:520px){.stats{gap:6px}.stat{padding:11px 5px}.stat strong{font-size:16px}.item{grid-template-columns:20px minmax(0,1fr) 48px 76px 25px;gap:4px}.item .name{font-size:12px}.item input.qty,.item input.price{font-size:11px;padding:7px 3px}}
+body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.item{grid-template-columns:22px minmax(0,1fr) 52px 76px 28px}.item .name{cursor:pointer}.item .name small{display:block;color:var(--green);font-size:11px;margin-top:2px}
+.neg{color:#c0504d!important}.catsum{font-size:11px;color:var(--muted);margin-inline-end:8px}
+#addPanel{display:none}#addPanel.open{display:block}.fields3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+.row{display:flex;gap:8px;margin-top:12px}.row button{flex:1}
+</style>
+</head>
+<body>
+<header><div class="crown">💍</div><h1>Fatma's Wedding Planner</h1><p>خطوة صغيرة كل مرة… لحد بيتك الحلو 🤍</p></header>
+<main class="wrap">
+<section class="stats">
+ <div class="stat"><small>إجمالي الميزانية</small><strong id="budgetStat">٣٬٠٠٠ ج</strong></div>
+ <div class="stat"><small>إجمالي المشتريات</small><strong id="spentStat">٠ ج</strong></div>
+ <div class="stat"><small>المتبقي</small><strong id="leftStat">٣٬٠٠٠ ج</strong></div>
+</section>
+<section class="panel">
+ <h2>💗 ملخص جهازك</h2>
+ <div class="fields">
+  <div><label for="budget">الميزانية الكلية (جنيه)</label><input id="budget" type="number" min="0" value="3000"></div>
+  <div><label for="targetDate">ميعاد الجواز المتوقع (اختياري)</label><input id="targetDate" type="date"></div>
+ </div>
+ <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:12px"><span>نسبة تجهيز الجهاز</span><b id="progressText">٠٪</b></div>
+ <div class="progress"><div class="bar" id="progressBar"></div></div>
+ <p style="font-size:11px;color:var(--muted);margin:9px 0 0">اكتبي سعر كل حاجة، وعلّمي عليها لما تشتريها. الحسابات بتتحدث تلقائيًا وبتتحفظ على نفس الجهاز والمتصفح. السعر = سعر الواحدة × العدد. اضغطي على اسم أي حاجة لتعديله.</p>
+</section>
+<div class="toolbar">
+ <input class="search" id="search" placeholder="🔎 دوري على حاجة في الجهاز...">
+ <button class="primary" id="addBtn">＋ إضافة حاجة</button>
+ <button class="ghost" id="exportBtn">تصدير نسخة</button>
+ <button class="ghost" id="importBtn">استيراد نسخة</button><input type="file" id="importFile" accept=".json,application/json" hidden>
+</div>
+<section class="panel" id="addPanel"><h2>＋ إضافة حاجة جديدة</h2>
+ <div class="fields"><div><label>اسم الحاجة</label><input id="addName"></div><div><label>القسم</label><select id="addGroup"></select></div></div>
+ <div class="fields" id="newGroupRow" style="display:none;margin-top:10px"><div style="grid-column:1/3"><label>اسم القسم الجديد</label><input id="addNewGroup"></div></div>
+ <div class="fields" style="margin-top:10px"><div><label>العدد</label><input id="addQty" type="number" min="0" value="1"></div><div><label>سعر الواحدة (ج)</label><input id="addPrice" type="number" min="0"></div></div>
+ <div class="row"><button class="primary" id="addSave">إضافة</button><button class="ghost" id="addCancel">إغلاق</button></div></section>
+<div id="categories"></div>
+<footer>مصمّم بحب لفاطمة 🤍 · احتفظي بنسخة احتياطية من وقت للتاني من زر «تصدير نسخة»</footer>
+</main>
+<script>
+const groups = [
+["🛏️ غرفة النوم",["سرير","مرتبة","دولاب","كومود","تسريحة","كرسي تسريحة","جزامة","شماعات","منظمات دولاب","مراية","إضاءة جانبية"]],
+["🛋️ غرفة المعيشة والصالون",["كنبة / انتريه","كرسي فوتيه","ترابيزة وسط","ترابيزة جانبية","مكتبة / وحدة تلفزيون","سجادة","ستائر","وحدات إضاءة","لوحات وديكور","مخدات ديكور"]],
+["🍽️ السفرة",["سفرة وكراسي","نيش / بوفيه","مفرش سفرة","رانر","طقم مفرش أطباق","طقم ملاعق وشوك وسكاكين","طقم توزيع","طقم تقديم","شيالات","صواني تقديم"]],
+["🧺 المفروشات",["طقم ملايات كبير","طقم ملايات إضافي","كوفرتة","لحاف","بطانية","دوفية","مخدات نوم","واقي مرتبة","مفرش سرير","مفارش كومود","فوط كبيرة","فوط متوسطة","فوط وجه","فوط يد","برنس حمام","روب","سجادة حمام","دعاسات","مفارش مطبخ","فوط مطبخ","مفارش سفرة إضافية"]],
+["🧸 مفروشات أوضة الأطفال",["طقم ملايات سرير أطفال","كوفرتة أطفال","لحاف أطفال","بطانية أطفال","مخدات أطفال","واقي مرتبة أطفال","مفرش سرير أطفال","ستائر أوضة الأطفال","سجادة أوضة الأطفال","فوط أطفال","فوط بغطاء رأس","ناموسية سرير"]],
+["🍳 الأجهزة الكهربائية الكبيرة",["ثلاجة","غسالة ملابس","بوتاجاز","فرن","شفاط","سخان مياه","تكييف","شاشة تلفزيون","فريزر (اختياري)"]],
+["🔌 الأجهزة الكهربائية الصغيرة",["ميكروويف","غلاية كهربائية","خلاط","هاند بلندر","كبة","محضر طعام","عجان","مضرب كهربائي","مطحنة","ماكينة قهوة","توستر","مكواة","مكنسة كهربائية","مروحة","ميزان مطبخ","إير فراير (اختياري)"]],
+["🥣 الرفايع وأدوات المطبخ",["طقم حلل استانلس","طقم جرانيت / تيفال","طقم طاسات","حلة ضغط","كنكة","براد شاي","صينية فرن","صواني بيتزا","قوالب كيك","طقم سكاكين","حامل سكاكين","لوح تقطيع","مصفاة كبيرة","مصفاة صغيرة","مبشرة","مقشرة","فتاحة علب","فتاحة زجاجات","مقص مطبخ","مغارف","ملاعق تقليب","مضرب يدوي","نشابة","فرشاة سيليكون","ملاعق قياس","أكواب معيارية","هاون","طبق عجن","مصفاة مكرونة","حامل أطباق","حامل ملاعق","قفازات فرن","فوط مطبخ"]],
+["🥛 الزجاج والكاسات",["طقم كاسات مياه","طقم كاسات عصير","طقم مجات","طقم شاي","طقم فناجين قهوة","طقم بولات","طقم أطباق زجاج","أطباق تقديم","طبق حلويات","طقم بايركس","صواني زجاج","زجاجات مياه","برطمانات زجاج","طقم توابل زجاج","فازات"]],
+["🍱 التخزين والتنظيم",["علب حفظ طعام","علب ثلاجة","علب فريزر","برطمانات تخزين","علب بهارات","منظمات أدراج","منظمات دولاب","سلال تخزين","علب بقوليات","زجاجات زيت وخل","حامل أكياس","مشابك أكياس"]],
+["🚿 الحمام",["طقم حمام","حامل فرش أسنان","موزع صابون","سلة مهملات","سلة غسيل","فرشاة تواليت","رف حمام","دعاسة حمام","منظم مستحضرات","ستارة بانيو (إن لزم)"]],
+["🧹 أدوات النظافة",["مقشة","جاروف","ممسحة","جردل","مساحة زجاج","فرش تنظيف","فرش أرضيات","منفضة","قفازات تنظيف","بخاخات","سلة قمامة مطبخ","سلة قمامة غرف"]],
+["👗 مستلزمات شخصية",["شنطة سفر","شنطة تنظيم","منظم إكسسوارات","علب إكسسوارات","مراية يد","مجفف شعر","فرش شعر","مستلزمات عناية شخصية","شبشب بيت","شبشب حمام"]],
+["🧰 أدوات متنوعة",["عدة منزلية بسيطة","شريط قياس","لمبات احتياطية","مشتركات كهرباء","مشابك غسيل","حبل غسيل","منشر","سلم منزلي صغير","بطاريات","كشاف طوارئ"]],
+["✨ الديكور واللمسات الأخيرة",["ساعة حائط","تابلوهات","فازات ديكور","شمعدانات","مرايات ديكور","نباتات صناعية","مفرش كونسول","صواني ديكور","إكسسوارات منزلية"]]
+];
+const KEY="fatmaWeddingPlannerV2",$=id=>document.getElementById(id),uid=()=>Math.random().toString(36).slice(2,9);
+const seed=()=>{let a=[];groups.forEach(([g,ns])=>ns.forEach(n=>a.push({id:uid(),g,name:n,done:false,qty:1,price:""})));return a};
+let state=null;try{state=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+if(!state||!Array.isArray(state.list))state={budget:3000,date:"",list:seed()};
+const closed=new Set(),fmt=n=>Number(n||0).toLocaleString("ar-EG",{maximumFractionDigits:2}),line=x=>(Number(x.qty)||0)*(Number(x.price)||0);
+const cats=()=>{let c=groups.map(g=>g[0]);state.list.forEach(x=>{if(!c.includes(x.g))c.push(x.g)});return c};
+function save(){state.budget=Number($("budget").value)||0;state.date=$("targetDate").value;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}renderStats()}
+function renderStats(){let L=state.list,spent=L.reduce((s,x)=>s+line(x),0),done=L.filter(x=>x.done).length,p=L.length?Math.round(done/L.length*100):0,b=Number($("budget").value)||0,left=b-spent;
+$("budgetStat").textContent=fmt(b)+" ج";$("spentStat").textContent=fmt(spent)+" ج";$("leftStat").textContent=fmt(left)+" ج";$("leftStat").classList.toggle("neg",left<0);$("progressText").textContent=fmt(p)+"٪";$("progressBar").style.width=p+"%";
+document.querySelectorAll("[data-cat]").forEach(el=>{let g=el.dataset.cat,its=L.filter(x=>x.g===g);el.textContent=fmt(its.reduce((s,x)=>s+line(x),0))+" ج"})}
+function render(){let q=$("search").value.trim().toLowerCase(),root=$("categories");root.innerHTML="";
+cats().forEach(g=>{let all=state.list.filter(x=>x.g===g),es=all.filter(x=>!q||x.name.toLowerCase().includes(q)||g.toLowerCase().includes(q));if(!es.length)return;
+let sec=document.createElement("section");sec.className="category";let head=document.createElement("div");head.className="cathead";
+head.innerHTML=`<b></b><span><span class="catsum" data-cat=""></span><span class="count">${fmt(all.filter(x=>x.done).length)} / ${fmt(all.length)} تم</span></span>`;head.querySelector("b").textContent=g;head.querySelector("[data-cat]").dataset.cat=g;
+let body=document.createElement("div");body.className="items";body.hidden=closed.has(g);
+es.forEach(x=>{let row=document.createElement("div");row.className="item"+(x.done?" done":"");
+let ck=document.createElement("input");ck.type="checkbox";ck.checked=!!x.done;ck.onchange=()=>{x.done=ck.checked;save();render()};
+let nm=document.createElement("span");nm.className="name";nm.title="اضغطي للتعديل";let lt=document.createElement("small");
+const upd=()=>{lt.textContent=line(x)?"= "+fmt(line(x))+" ج":""};nm.append(x.name,lt);upd();
+nm.onclick=()=>{let v=prompt("عدّلي الاسم:",x.name);if(v&&v.trim()){x.name=v.trim();save();render()}};
+let qty=document.createElement("input");qty.className="qty";qty.type="number";qty.min="0";qty.placeholder="العدد";qty.value=x.qty??1;qty.oninput=()=>{x.qty=qty.value;upd();save()};
+let pr=document.createElement("input");pr.className="price";pr.type="number";pr.min="0";pr.placeholder="سعر الواحدة";pr.value=x.price||"";pr.oninput=()=>{x.price=pr.value;upd();save()};
+let del=document.createElement("button");del.className="del";del.textContent="×";del.title="حذف";del.onclick=()=>{if(confirm("تحذفي "+x.name+" من القائمة؟")){state.list=state.list.filter(y=>y.id!==x.id);save();render()}};
+row.append(ck,nm,qty,pr,del);body.append(row)});
+head.onclick=()=>{body.hidden=!body.hidden;body.hidden?closed.add(g):closed.delete(g)};sec.append(head,body);root.append(sec)});
+if(!root.children.length)root.innerHTML='<div class="empty">مفيش نتائج مطابقة 🤍</div>';renderStats()}
+$("budget").value=state.budget??3000;$("targetDate").value=state.date||"";$("budget").addEventListener("input",save);$("targetDate").addEventListener("change",save);$("search").addEventListener("input",render);
+function fillGroups(){let s=$("addGroup");s.innerHTML="";cats().forEach(c=>s.add(new Option(c,c)));s.add(new Option("＋ قسم جديد…","__new"))}
+$("addGroup").onchange=()=>{$("newGroupRow").style.display=$("addGroup").value==="__new"?"grid":"none"};
+$("addBtn").onclick=()=>{fillGroups();$("addPanel").classList.add("open");$("addName").focus();$("addPanel").scrollIntoView({behavior:"smooth"})};
+$("addCancel").onclick=()=>$("addPanel").classList.remove("open");
+$("addSave").onclick=()=>{let n=$("addName").value.trim();if(!n){$("addName").focus();return}let g=$("addGroup").value;if(g==="__new")g=$("addNewGroup").value.trim()||"إضافات خاصة";
+state.list.push({id:uid(),g,name:n,done:false,qty:$("addQty").value||"1",price:$("addPrice").value});closed.delete(g);$("addName").value="";$("addPrice").value="";$("addQty").value="1";save();render();fillGroups();$("addGroup").value=g;$("addName").focus()};
+$("exportBtn").onclick=()=>{save();let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:"application/json"}));a.download="Fatma-Wedding-Planner-Backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$("importBtn").onclick=()=>$("importFile").click();
+$("importFile").onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result),n;
+if(Array.isArray(d.list))n=d;else if(d.categories){n={budget:d.budget,date:"",list:[]};Object.entries(d.categories).forEach(([g,a])=>a.forEach(v=>n.list.push({id:uid(),g,name:v.name,done:!!v.done,price:v.price||"",qty:v.qty??1})))}else if(d.items){n={budget:d.budget,date:d.date,list:seed()};Object.entries(d.items).forEach(([k,v])=>{let m=n.list.find(y=>y.g===v.group&&y.name===v.name);if(m)Object.assign(m,{done:v.done,price:v.price,qty:v.qty??1});else n.list.push({id:uid(),g:v.group,name:v.name,done:!!v.done,price:v.price||"",qty:v.qty??1})})}else throw 0;
+if(!confirm("هيتم استبدال البيانات الحالية بالنسخة دي. متأكدة؟"))return;state=n;$("budget").value=state.budget??3000;$("targetDate").value=state.date||"";save();render()}catch(err){alert("الملف مش نسخة صحيحة")}};r.readAsText(f);e.target.value=""};
+render();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body></html>
